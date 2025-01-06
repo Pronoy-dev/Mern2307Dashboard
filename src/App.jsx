@@ -1,3 +1,4 @@
+import Banner from "./components/banner/Banner";
 import Home from "./pages/Home";
 import {
   createRoutesFromElements,
@@ -9,7 +10,7 @@ import {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Home />}>
-      <Route path="/prodouct" element={"hello this is product"}></Route>
+      <Route path="/banner" element={<Banner />}></Route>
     </Route>
   )
 );

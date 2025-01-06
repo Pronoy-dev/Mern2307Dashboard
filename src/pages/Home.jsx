@@ -7,7 +7,7 @@ const Home = () => {
       <div>
         <Sidebar />
       </div>
-      <div>
+      <div className="w-full  p-6">
         <Outlet />
       </div>
     </div>

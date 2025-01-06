@@ -19,6 +19,7 @@ import {
   InboxIcon,
   PowerIcon,
   ListBulletIcon,
+  PresentationChartLineIcon,
 } from "@heroicons/react/24/solid";
 
 import {
@@ -27,6 +28,8 @@ import {
   HomeIcon,
   ViewColumnsIcon,
 } from "@heroicons/react/24/outline";
+import { AiOutlineProduct } from "react-icons/ai";
+import { Link } from "react-router-dom";
 const Sidebar = () => {
   const [open, setOpen] = React.useState(0);
 
@@ -69,18 +72,39 @@ const Sidebar = () => {
             </ListItem>
             <AccordionBody className="py-1">
               <List className="p-0">
-                <ListItem>
-                  <ListItemPrefix>
-                    <ViewColumnsIcon class="h-6 w-6 text-gray-500" />
-                  </ListItemPrefix>
-                  Banner
-                </ListItem>
-
+                <Link to="/banner">
+                  <ListItem>
+                    <ListItemPrefix>
+                      <ViewColumnsIcon class="h-6 w-6 text-gray-500" />
+                    </ListItemPrefix>
+                    Banner
+                  </ListItem>
+                </Link>
                 <ListItem>
                   <ListItemPrefix>
                     <ListBulletIcon className="h-6 w-6 text-gray-500" />
                   </ListItemPrefix>
                   Category
+                </ListItem>
+                <ListItem>
+                  <ListItemPrefix>
+                    <ListBulletIcon className="h-6 w-6 text-gray-500" />
+                  </ListItemPrefix>
+                  SubCategory
+                </ListItem>
+
+                <ListItem>
+                  <ListItemPrefix>
+                    <AiOutlineProduct className="h-6 w-6 text-gray-500" />
+                  </ListItemPrefix>
+                  FlashSale
+                </ListItem>
+
+                <ListItem>
+                  <ListItemPrefix>
+                    <PresentationChartLineIcon class="h-6 w-6 text-gray-500" />
+                  </ListItemPrefix>
+                  BestSelling Product
                 </ListItem>
               </List>
             </AccordionBody>
