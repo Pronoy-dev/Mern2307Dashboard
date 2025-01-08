@@ -2,6 +2,7 @@ import Banner from "./components/banner/Banner";
 import BestSelling from "./components/BestSellling/BestSelling";
 import Category from "./components/Category/Category";
 import FlashSale from "./components/FlashSale/FlashSale";
+import ProductList from "./components/ProductList/ProductList";
 import Product from "./components/Products/Product";
 import Subcategory from "./components/Subcategory/Subcategory";
 import Home from "./pages/Home";
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path="/flashsale" element={<FlashSale />}></Route>
       <Route path="/bestSelling" element={<BestSelling />}></Route>
       <Route path="/products" element={<Product />}></Route>
+      <Route path="/productslist" element={<ProductList />}></Route>
     </Route>
   )
 );

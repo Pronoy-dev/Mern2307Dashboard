@@ -151,6 +151,16 @@ const Sidebar = () => {
                   </ListItem>
                 </Link>
               </List>
+              <List className="p-0">
+                <Link to={"/productslist"}>
+                  <ListItem>
+                    <ListItemPrefix>
+                      <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                    </ListItemPrefix>
+                    Products List
+                  </ListItem>
+                </Link>
+              </List>
             </AccordionBody>
           </Accordion>
           <ListItem>

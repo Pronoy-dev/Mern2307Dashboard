@@ -6,7 +6,7 @@ const Product = () => {
   const [value, setValue] = useState("");
 
   return (
-    <div>
+    <>
       <div className="flex flex-col gap-y-10">
         <Input size="md" label="Product Name" />
         <div className="mb-10">
@@ -98,7 +98,7 @@ const Product = () => {
           Upload
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 
