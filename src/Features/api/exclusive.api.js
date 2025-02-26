@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const exclusiveApi = createApi({
   reducerPath: "exclusive",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
-  tagTypes: ["banner"],
+  tagTypes: ["banner" , "category" , 'subCategory'],
   endpoints: (builder) => ({
     uploadBanner: builder.mutation({
       query: (banneruploadData) => ({
@@ -38,10 +38,46 @@ export const exclusiveApi = createApi({
       }),
       invalidatesTags: ["banner"],
     }),
+    uploadCategory: builder.mutation({
+      query: data => ({
+        url: `/category`,
+        method: "post",
+        body:data
+      }),
+      invalidatesTags: ["category"],
+    }),
+    getAllCategory: builder.query({
+      query: () => `/category`,
+      providesTags: ["category"],
+    }),
+    uploadSubCategory: builder.mutation({
+      query: data => ({
+        url: `/subcategory`,
+        method: "post",
+        body:data
+      }),
+      invalidatesTags: ["subCategory"],
+    }),
+    DeleteSubCategory: builder.mutation({
+      query: id => ({
+        url: `/subcategory/${id}`,
+        method: "delete",
+      }),
+      invalidatesTags: ["subCategory"],
+    }),
+    getAllSubCategory: builder.query({
+      query: () => `/subcategory`,
+      providesTags: ["subCategory"],
+    }),
   }),
 });
 
 export const {
+  useDeleteSubCategoryMutation,
+  useGetAllSubCategoryQuery,
+  useUploadSubCategoryMutation,
+  useGetAllCategoryQuery,
+  useUploadCategoryMutation,
   useUploadBannerMutation,
   useGetAllBannerQuery,
   useUpdateBannerMutation,

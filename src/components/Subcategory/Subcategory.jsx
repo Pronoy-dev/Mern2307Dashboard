@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Textarea,
   Input,
@@ -11,81 +11,110 @@ import {
   DialogFooter,
   Select,
   Option,
+  useSelect,
 } from "@material-tailwind/react";
+import { useForm } from "react-hook-form";
+import {
+  useDeleteSubCategoryMutation,
+  useGetAllCategoryQuery,
+  useGetAllSubCategoryQuery,
+  useUploadSubCategoryMutation,
+} from "../../Features/api/exclusive.api";
+import { ToastSucess } from "../../utils/Toast";
 const Subcategory = () => {
   const [open, setOpen] = React.useState(false);
-  const TABLE_HEAD = [" Name", "Category", "Date", "Actions"];
-  const TABLE_ROWS = [
-    {
-      name: "John Michael",
-      job: "Manager",
-      date: "23/04/18",
-    },
-    {
-      name: "Alexa Liras",
-      job: "Developer",
-      date: "23/04/18",
-    },
-    {
-      name: "Laurent Perrier",
-      job: "Executive",
-      date: "19/09/17",
-    },
-    {
-      name: "Michael Levi",
-      job: "Developer",
-      date: "24/12/08",
-    },
-    {
-      name: "Richard Gran",
-      job: "Manager",
-      date: "04/10/21",
-    },
-    {
-      name: "Richard Gran",
-      job: "Manager",
-      date: "04/10/21",
-    },
-    {
-      name: "Michael Levi",
-      job: "Developer",
-      date: "24/12/08",
-    },
-    {
-      name: "Richard Gran",
-      job: "Manager",
-      date: "04/10/21",
-    },
-    {
-      name: "Richard Gran",
-      job: "Manager",
-      date: "04/10/21",
-    },
-    {
-      name: "Michael Levi",
-      job: "Developer",
-      date: "24/12/08",
-    },
-  ];
+  const TABLE_HEAD = ["SubCategory", "Category ", "Products", "Actions"];
+
+  const { data, isLoading, isError } = useGetAllCategoryQuery();
+
   const handleOpen = () => setOpen(!open);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    trigger,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [uploadSubCategory, { isLoading: subcategoryLoading }] =
+    useUploadSubCategoryMutation();
+  const onSubmit = async (data) => {
+    try {
+      const response = await uploadSubCategory(data);
+
+      if (response.data.data) {
+        ToastSucess("sub Category Created Sucessfull");
+      }
+    } catch (error) {
+      console.log("error is ", error);
+    } finally {
+      reset();
+    }
+  };
+  // useGetAllSubCategoryQuery
+  const {
+    data: subdata,
+    isError: subError,
+    isLoading: subLoading,
+  } = useGetAllSubCategoryQuery();
+
+
+  // handledeleteSubcategory
+  const [delteditem , setdelteditem] = useState(null)
+  const [DeleteSubCategory, { isLoading: deltesub }] = useDeleteSubCategoryMutation();
+  const handledeleteSubcategory = async (id) => {
+    try {
+      setdelteditem(id)
+      const reponse = await DeleteSubCategory(id);
+      
+      
+    } catch (error) {
+      console.log("error from delte sub category", error);
+    }
+  };
   return (
     <div className="flex flex-col gap-y-5">
-      <Input size="md" label="SubCategory Name" color="black" />
-      <Select color="purple" label="Select Category">
-        <Option>Material Tailwind HTML</Option>
-        <Option>Material Tailwind React</Option>
-        <Option>Material Tailwind Vue</Option>
-        <Option>Material Tailwind Angular</Option>
-        <Option>Material Tailwind Svelte</Option>
-      </Select>
-      <Button
-        variant="filled"
-        color="green"
-        loading={false}
-        className="w-[10%]"
+      <form
+        action=""
+        className="flex flex-col gap-y-5"
+        onSubmit={handleSubmit(onSubmit)}
       >
-        Create
-      </Button>
+        <Input
+          size="md"
+          label="SubCategory Name"
+          color="black"
+          {...register("name", { required: true })}
+        />
+        {errors.name && <span>This field is required</span>}
+        {!isLoading && (
+          <Select
+            color="purple"
+            label="Select Category"
+            value={watch("category")} // Get current value from React Hook Form
+            onChange={(e) => setValue("category", e)} // Manually update RHF value
+            onBlur={() => trigger("category")} // Trigger validation
+          >
+            {data?.data?.map((item) => (
+              <Option key={item._id} value={item._id}>
+                {item.name}
+              </Option>
+            ))}
+          </Select>
+        )}
+
+        {errors.category && <span>This category is required</span>}
+        <Button
+          variant="filled"
+          color="green"
+          loading={subcategoryLoading}
+          type="submit"
+          className="w-[20%]"
+        >
+          Create
+        </Button>
+      </form>
 
       {/* category list */}
       <Card className="h-[575px] mt-10 w-full overflow-y-scroll">
@@ -109,21 +138,21 @@ const Subcategory = () => {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(({ name, job, date }, index) => {
-              const isLast = index === TABLE_ROWS.length - 1;
+            {subdata?.data?.map((item, index) => {
+              const isLast = index === subdata?.data?.length - 1;
               const classes = isLast
                 ? "p-4"
                 : "p-4 border-b border-blue-gray-50 text-center";
 
               return (
-                <tr key={name}>
+                <tr key={item._id}>
                   <td className={classes}>
                     <Typography
                       variant="small"
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {name}
+                      {item.name}
                     </Typography>
                   </td>
                   <td className={classes}>
@@ -132,7 +161,7 @@ const Subcategory = () => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {job}
+                      {item.category.name}
                     </Typography>
                   </td>
                   <td className={classes}>
@@ -141,12 +170,18 @@ const Subcategory = () => {
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {date}
+                      {item.product?.length}
                     </Typography>
                   </td>
                   <td className={classes}>
                     <div className="flex items-center gap-x-3 justify-center">
-                      <Button color="red">Delete</Button>
+                      <Button
+                        color="red"
+                        loading= {delteditem === item._id && deltesub }
+                        onClick={() => handledeleteSubcategory(item._id)}
+                      >
+                        Delete
+                      </Button>
                       <Button color="green" onClick={handleOpen}>
                         Edit
                       </Button>
